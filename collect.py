@@ -1,6 +1,6 @@
-from csv import writer
+from csv import writer, reader
 from json import dump
-from os import makedirs
+from os import makedirs, remove
 from typing import override
 
 import cv2
@@ -40,19 +40,30 @@ class Collector(Camera):
             with open(self.csv_path, "a", newline="") as f:
                 w = writer(f)
                 w.writerow([filename, self.class_id])
-            print(f"Saved {filename} (class {self.class_id})")
             self.num_cases += 1
+            print(f"Saved {filename} (class {self.class_id})")
+        elif key == ord("x") and self.num_cases > 0:
+            with open(self.csv_path, "r") as f:
+                rows = list(reader(f))
+            if len(rows) > 1:
+                with open(self.csv_path, "w", newline="") as f:
+                    w = writer(f)
+                    w.writerows(rows[:-1])
+                remove(f"{self.images_dir}/{rows[-1][0]}")
+                print(f"Removed last entry")
+            self.num_cases -= 1
         elif key == ord("q"):
             return True
         elif ord("0") <= key <= ord("9"):
             self.class_id = key - ord("0")
+            print(f"Set class to {self.class_id}")
         return False
 
 
 if __name__ == "__main__":
     app = Collector()
     app.run()
-    with open(f"{DATASET_DIR}/types.json", "w") as f:
+    with open(f"{DATASET_DIR}/types.json", "w") as _f:
         dump([
             {"class_id": 0, "description": "background / no screw"},
             {"class_id": 1, "description": "flat 1.5cm"},
@@ -61,4 +72,4 @@ if __name__ == "__main__":
             {"class_id": 4, "description": "flat 3.5cm"},
             {"class_id": 5, "description": "flat 6.0cm"},
             {"class_id": 6, "description": "flat 7.5cm"}
-        ], f)
+        ], _f)
