@@ -1,7 +1,7 @@
 from typing import override
 
 import torch
-from mipcandy import Trainer, Params, AmbiguousShape, TrainerToolbox, convert_logits_to_ids
+from mipcandy import Trainer, Params, AmbiguousShape, TrainerToolbox, convert_logits_to_ids, save_image
 from torch import optim, nn
 
 from sort_screws.network import EfficientNetNetwork
@@ -49,3 +49,14 @@ class EfficientNetTrainer(EfficientNetNetwork, Trainer):
         logits = toolbox.model(image)
         loss = toolbox.criterion(logits, label)
         return -loss.item(), {"correctness": float((convert_logits_to_ids(logits) == label).item())}, logits.squeeze(0)
+
+    @override
+    def save_preview(self, image: torch.Tensor, label: torch.Tensor, output: torch.Tensor, *,
+                     quality: float = .75) -> None:
+        save_image(image, f"{self.experiment_folder()}/input.png")
+        label = str(label.item())
+        with open(f"{self.experiment_folder()}/label-{label}", "w") as f:
+            f.write(label)
+        output = str(convert_logits_to_ids(output, channel_dim=0).item())
+        with open(f"{self.experiment_folder()}/output-{output}", "w") as f:
+            f.write(output)
