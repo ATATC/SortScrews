@@ -27,9 +27,9 @@ class Collector(Camera):
     def job(self, frame: np.ndarray, roi: np.ndarray, bbox: tuple[int, int, int, int]) -> bool:
         x1, y1, x2, y2 = bbox
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        cv2.putText(frame, f"Class: {frame.class_id}", (20, 40), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2,
+        cv2.putText(frame, f"Class: {self.class_id}", (20, 40), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2,
                     cv2.LINE_AA)
-        cv2.putText(frame, f"Num cases: {frame.num_cases}", (20, 80), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255),
+        cv2.putText(frame, f"Num cases: {self.num_cases}", (20, 80), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255),
                     2,
                     cv2.LINE_AA)
         cv2.imshow("Camera Preview", frame)
