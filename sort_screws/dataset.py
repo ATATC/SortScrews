@@ -9,7 +9,8 @@ from pandas import read_csv
 
 
 class SortScrewsDataset(SupervisedDataset[list[str] | list[int]]):
-    def __init__(self, folder: str | PathLike[str], transform: JointTransform | None = None, device: Device = "cpu") -> None:
+    def __init__(self, folder: str | PathLike[str], include_background: bool, *,
+                 transform: JointTransform | None = None, device: Device = "cpu") -> None:
         csv_path = f"{folder}/labels.csv"
         if not exists(csv_path):
             raise FileNotFoundError(f"CSV not found: {csv_path}")
@@ -18,17 +19,22 @@ class SortScrewsDataset(SupervisedDataset[list[str] | list[int]]):
             raise ValueError(f"Expected [filename, class id] in {csv_path}, got shape {df.shape}")
         images, labels = [], []
         for _, row in df.iterrows():
-            image_path = f"{folder}/images/{row.iloc[0]}"
-            class_id = int(row.iloc[1])
-            if not exists(image_path):
-                raise FileNotFoundError(f"Image not found: {image_path}")
-            images.append(image_path)
-            labels.append(class_id)
+            images.append(row.iloc[0])
+            labels.append(int(row.iloc[1]))
         with open(f"{folder}/types.json") as f:
             types = load(f)
         self._num_classes: int = len(types)
+        if include_background:
+            images += ["case_120.png"] * 19
+            images += ["case_241.png"] * 19
+            labels = labels[:121] + [0] * 19 + labels[121:] + [0] * 19
+        else:
+            images.remove("case_120.png")
+            images.remove("case_241.png")
+            labels = labels[:120] + labels[121:-1]
         super().__init__(images, labels, transform=transform, device=device)
         self._folder: str = str(folder)
+        self._include_background: bool = include_background
 
     @property
     def num_classes(self) -> int:
@@ -36,7 +42,7 @@ class SortScrewsDataset(SupervisedDataset[list[str] | list[int]]):
 
     @override
     def load_image(self, idx: int) -> torch.Tensor:
-        return self.do_load(self._images[idx], device=self._device)
+        return self.do_load(f"{self._folder}/images/{self._images[idx]}", device=self._device)
 
     @override
     def load_label(self, idx: int) -> torch.Tensor:
@@ -44,7 +50,7 @@ class SortScrewsDataset(SupervisedDataset[list[str] | list[int]]):
 
     @override
     def construct_new(self, images: list[str], labels: list[int]) -> Self:
-        new = SortScrewsDataset(self._folder, transform=self._transform, device=self._device)
+        new = SortScrewsDataset(self._folder, self._include_background, transform=self._transform, device=self._device)
         new._images = images
         new._labels = labels
         return new
