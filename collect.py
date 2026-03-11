@@ -13,7 +13,7 @@ DATASET_DIR: str = "SortScrews"
 
 class Collector(Camera):
     def __init__(self, *, append_from: int | None = None) -> None:
-        super().__init__(256)
+        super().__init__(512)
         self.images_dir: str = f"{DATASET_DIR}/images"
         self.csv_path: str = f"{DATASET_DIR}/labels.csv"
         if not append_from:
