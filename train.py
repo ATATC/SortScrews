@@ -1,3 +1,4 @@
+from os import rename
 from os.path import exists
 
 from torch.utils.data import DataLoader
@@ -15,3 +16,9 @@ if __name__ == "__main__":
     trainer = EfficientNetTrainer("trainer", train_dl, val_dl, recoverable=False)
     trainer.num_classes = dataset.num_classes
     trainer.train(100, seed=42, compile_model=False)
+    target = "trainer/EfficientNetTrainer/final"
+    experiment_folder = trainer.experiment_folder()
+    if exists(target):
+        print(f"{trainer} already exists, {experiment_folder} kept unchanged")
+    else:
+        rename(experiment_folder, target)
