@@ -48,7 +48,11 @@ class EfficientNetTrainer(EfficientNetNetwork, Trainer):
         image, label = image.unsqueeze(0), label.unsqueeze(0)
         logits = toolbox.model(image)
         loss = toolbox.criterion(logits, label)
-        return -loss.item(), {"correctness": float((convert_logits_to_ids(logits) == label).item())}, logits.squeeze(0)
+        pred_ids = convert_logits_to_ids(logits)
+        metrics = {"correctness": float((pred_ids == label).item())}
+        for class_id in range(self.num_classes):
+            metrics[f"class {class_id}"] = 1 if class_id == pred_ids.item() else 0
+        return -loss.item(), metrics, logits.squeeze(0)
 
     @override
     def save_preview(self, image: torch.Tensor, label: torch.Tensor, output: torch.Tensor, *,

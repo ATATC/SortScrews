@@ -14,7 +14,7 @@ authors = [
     { name = "Tianhao Fu", email = "terry.fu@projectneura.org" },
     { name = "Yucheng Chen", email = "steven.chen@projectneura.org" }
 ]
-dependencies = ["mipcandy"]
+dependencies = ["mipcandy", "opencv-python"]
 
 [tool.hatch.build.targets.sdist]
 only-include = ["segwithu"]
