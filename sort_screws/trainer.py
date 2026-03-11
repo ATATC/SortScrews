@@ -38,7 +38,7 @@ class EfficientNetTrainer(EfficientNetNetwork, Trainer):
     def backward(self, images: torch.Tensor, labels: torch.Tensor, toolbox: TrainerToolbox) -> tuple[float, dict[
         str, float]]:
         logits = toolbox.model(images)
-        loss = toolbox.criterion(logits, labels)
+        loss = toolbox.criterion(logits.softmax(1), labels)
         loss.backward()
         return loss.item(), {}
 
@@ -47,11 +47,12 @@ class EfficientNetTrainer(EfficientNetNetwork, Trainer):
         float, dict[str, float], torch.Tensor]:
         image, label = image.unsqueeze(0), label.unsqueeze(0)
         logits = toolbox.model(image)
-        loss = toolbox.criterion(logits, label)
+        loss = toolbox.criterion(logits.softmax(1), label)
         pred_ids = convert_logits_to_ids(logits)
         metrics = {"correctness": float((pred_ids == label).item())}
         for class_id in range(self.num_classes):
-            metrics[f"class {class_id}"] = 1 if class_id == pred_ids.item() else 0
+            metrics[f"label cls {class_id}"] = 1 if class_id == label.item() else 0
+            metrics[f"pred cls {class_id}"] = 1 if class_id == pred_ids.item() else 0
         return -loss.item(), metrics, logits.squeeze(0)
 
     @override
