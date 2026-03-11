@@ -48,4 +48,4 @@ class EfficientNetTrainer(EfficientNetNetwork, Trainer):
         image, label = image.unsqueeze(0), label.unsqueeze(0)
         logits = toolbox.model(image)
         loss = toolbox.criterion(logits, label)
-        return loss.item(), {"correctness": float((convert_logits_to_ids(logits) == label).item())}, logits.squeeze(0)
+        return -loss.item(), {"correctness": float((convert_logits_to_ids(logits) == label).item())}, logits.squeeze(0)
