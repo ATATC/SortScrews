@@ -17,7 +17,7 @@ class Collector(Camera):
         self.images_dir: str = f"{DATASET_DIR}/images"
         self.csv_path: str = f"{DATASET_DIR}/labels.csv"
         if not append_from:
-            makedirs(self.images_dir, exist_ok=True)
+            makedirs(self.images_dir)
             with open(self.csv_path, "w") as f:
                 f.write("filename,class\n")
         # runtime

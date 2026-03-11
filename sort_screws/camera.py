@@ -9,8 +9,8 @@ class Camera(object):
         self._device_id: int = device_id
 
     @staticmethod
-    def wait_key() -> int:
-        return cv2.waitKey(1) & 0xFF
+    def wait_key(*, delay: int = 1) -> int:
+        return cv2.waitKey(delay) & 0xFF
 
     def job(self, frame: np.ndarray, roi: np.ndarray, bbox: tuple[int, int, int, int]) -> bool:
         ...
