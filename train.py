@@ -9,12 +9,14 @@ from sort_screws import SortScrewsDataset, EfficientNetTrainer
 if __name__ == "__main__":
     if not exists("SortScrews") and input("Dataset not found, download? (y/n) >>>") == "y":
         download_dataset("atatc/ut/esc102/SortScrews", "SortScrews")
-    dataset = SortScrewsDataset("SortScrews", True)
-    train, val = dataset.fold(fold="all")
+    train = SortScrewsDataset("SortScrews", True)
+    val = SortScrewsDataset("SortScrews/validation", True)
+    if train.num_classes != val.num_classes:
+        raise ValueError(f"Number of classes mismatch: train={train.num_classes}, val={val.num_classes}")
     train_dl = DataLoader(train, 16, True, num_workers=4, prefetch_factor=2, persistent_workers=True, pin_memory=True)
     val_dl = DataLoader(val, 1, False)
     trainer = EfficientNetTrainer("trainer", train_dl, val_dl, recoverable=False, device=auto_device())
-    trainer.num_classes = dataset.num_classes
+    trainer.num_classes = train.num_classes
     trainer.train(100, seed=42, compile_model=False)
     target = "trainer/EfficientNetTrainer/final"
     experiment_folder = trainer.experiment_folder()
