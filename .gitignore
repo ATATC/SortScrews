@@ -1,0 +1,8 @@
+.idea
+__pycache__
+main.py
+build
+*.egg-info
+dist
+SortScrews
+SortScrews.zip
