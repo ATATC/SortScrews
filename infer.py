@@ -21,9 +21,9 @@ class Predictor(Camera, HasDevice):
         x1, y1, x2, y2 = bbox
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
         cv2.imshow("Camera Preview", frame)
-        images = torch.as_tensor(roi, device=self._device).unsqueeze(0)
+        images = torch.as_tensor(roi, dtype=torch.float, device=self._device).permute(2, 0, 1)
         logits = self.predictor.predict(images)[0]
-        class_id = convert_logits_to_ids(logits)
+        class_id = convert_logits_to_ids(logits, channel_dim=0).item()
         cv2.putText(frame, f"Class: {class_id}", (20, 40), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2,
                     cv2.LINE_AA)
         key = self.wait_key()
@@ -35,5 +35,5 @@ class Predictor(Camera, HasDevice):
 if __name__ == "__main__":
     device = auto_device()
     print(device)
-    app = Predictor("trainer/EfficientNetPredictor/final", device=device)
+    app = Predictor("trainer/EfficientNetTrainer/final", device=device)
     app.run()
