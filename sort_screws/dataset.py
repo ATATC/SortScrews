@@ -24,14 +24,9 @@ class SortScrewsDataset(SupervisedDataset[list[str] | list[int]]):
         with open(f"{folder}/types.json") as f:
             types = load(f)
         self._num_classes: int = len(types)
-        if include_background:
-            images += ["case_120.png"] * 19
-            images += ["case_241.png"] * 19
-            labels = labels[:121] + [0] * 19 + labels[121:] + [0] * 19
-        else:
-            images.remove("case_120.png")
-            images.remove("case_241.png")
-            labels = labels[:120] + labels[121:-1]
+        if not include_background:
+            images = images[20:]
+            labels = labels[20:]
         super().__init__(images, labels, transform=transform, device=device)
         self._folder: str = str(folder)
         self._include_background: bool = include_background
