@@ -55,8 +55,8 @@ class EfficientNetTrainer(EfficientNetNetwork, Trainer):
                      quality: float = .75) -> None:
         save_image(image, f"{self.experiment_folder()}/input.png")
         label = str(label.item())
-        with open(f"{self.experiment_folder()}/label-{label}", "w") as f:
+        with open(f"{self.experiment_folder()}/label.txt", "w") as f:
             f.write(label)
         output = str(convert_logits_to_ids(output, channel_dim=0).item())
-        with open(f"{self.experiment_folder()}/output-{output}", "w") as f:
+        with open(f"{self.experiment_folder()}/output.txt", "w") as f:
             f.write(output)
