@@ -1,4 +1,5 @@
 from csv import writer
+from json import dump
 from os import makedirs
 from typing import override
 
@@ -51,3 +52,13 @@ class Collector(Camera):
 if __name__ == "__main__":
     app = Collector()
     app.run()
+    with open(f"{DATASET_DIR}/types.json", "w") as f:
+        dump([
+            {"class_id": 0, "description": "background / no screw"},
+            {"class_id": 1, "description": "flat 1.5cm"},
+            {"class_id": 2, "description": "round 2.5cm"},
+            {"class_id": 3, "description": "flat 3.0cm"},
+            {"class_id": 4, "description": "flat 3.5cm"},
+            {"class_id": 5, "description": "flat 6.0cm"},
+            {"class_id": 6, "description": "flat 7.5cm"}
+        ], f)
