@@ -3,8 +3,8 @@ import numpy as np
 
 
 class Camera(object):
-    def __init__(self, box_size: int, *, resize: int | None = None, device_id: int = 0) -> None:
-        self._box_size: int = box_size
+    def __init__(self, roi_size: int, *, resize: int | None = None, device_id: int = 0) -> None:
+        self._roi_size: int = roi_size
         self._resize: int | None = resize
         self._device_id: int = device_id
 
@@ -26,7 +26,7 @@ class Camera(object):
             h, w = frame.shape[:2]
             cx = w // 2
             cy = h // 2
-            half = self._box_size // 2
+            half = self._roi_size // 2
             x1 = cx - half
             y1 = cy - half
             x2 = cx + half

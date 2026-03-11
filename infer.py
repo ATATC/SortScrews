@@ -11,9 +11,9 @@ from sort_screws import Camera, EfficientNetPredictor
 
 class Predictor(Camera, HasDevice):
     def __init__(self, experiment_folder: str | PathLike[str], *, device: Device = "cpu") -> None:
-        Camera.__init__(self, 256)
+        Camera.__init__(self, 512)
         HasDevice.__init__(self, device)
-        self.predictor: EfficientNetPredictor = EfficientNetPredictor(str(experiment_folder), (3, 256, 256),
+        self.predictor: EfficientNetPredictor = EfficientNetPredictor(str(experiment_folder), (3, 512, 512),
                                                                       device=device)
         self.paused: bool = False
 
