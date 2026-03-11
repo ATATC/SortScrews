@@ -40,7 +40,7 @@ class SortScrewsDataset(SupervisedDataset[list[str] | list[int]]):
 
     @override
     def load_label(self, idx: int) -> torch.Tensor:
-        return torch.tensor(self._labels[idx], dtype=torch.int, device=self._device)
+        return torch.tensor(self._labels[idx], dtype=torch.long, device=self._device)
 
     @override
     def construct_new(self, images: list[str], labels: list[int]) -> Self:
