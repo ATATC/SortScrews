@@ -25,8 +25,11 @@ class SortScrewsDataset(SupervisedDataset[list[str] | list[int]]):
             types = load(f)
         self._num_classes: int = len(types)
         if not include_background:
-            images = images[20:]
-            labels = labels[20:]
+            for i in range(len(images)):
+                if labels[i] == 0:
+                    images.pop(i)
+                    labels.pop(i)
+                    i -= 1
         super().__init__(images, labels, transform=transform, device=device)
         self._folder: str = str(folder)
         self._include_background: bool = include_background
