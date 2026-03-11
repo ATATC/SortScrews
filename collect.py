@@ -12,16 +12,17 @@ DATASET_DIR: str = "SortScrews"
 
 
 class Collector(Camera):
-    def __init__(self) -> None:
+    def __init__(self, *, append_from: int | None = None) -> None:
         super().__init__(256)
         self.images_dir: str = f"{DATASET_DIR}/images"
         self.csv_path: str = f"{DATASET_DIR}/labels.csv"
-        makedirs(self.images_dir, exist_ok=True)
-        with open(self.csv_path, "w") as f:
-            f.write("filename,class\n")
+        if not append_from:
+            makedirs(self.images_dir, exist_ok=True)
+            with open(self.csv_path, "w") as f:
+                f.write("filename,class\n")
         # runtime
         self.class_id: int = 0
-        self.num_cases: int = 0
+        self.num_cases: int = append_from if append_from else 0
 
     @override
     def job(self, frame: np.ndarray, roi: np.ndarray, bbox: tuple[int, int, int, int]) -> bool:
