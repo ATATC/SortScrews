@@ -1,8 +1,13 @@
+from os.path import exists
+
 from torch.utils.data import DataLoader
+from mipcandy import download_dataset
 
 from sort_screws import SortScrewsDataset, EfficientNetTrainer
 
 if __name__ == "__main__":
+    if not exists("SortScrews") and input("Dataset not found, download? (y/n) >>>") == "y":
+        download_dataset("atatc/esc102/SortScrews", "SortScrews")
     dataset = SortScrewsDataset("SortScrews")
     train, val = dataset.fold(fold="all")
     train_dl = DataLoader(train, 16, True, num_workers=4, prefetch_factor=2, persistent_workers=True, pin_memory=True)
