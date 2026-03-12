@@ -72,5 +72,5 @@ if __name__ == "__main__":
             {"class_id": 3, "description": "flat 3.0cm"},
             {"class_id": 4, "description": "flat 3.5cm"},
             {"class_id": 5, "description": "flat 6.0cm"},
-            {"class_id": 6, "description": "flat 7.5cm"}
+            {"class_id": 6, "description": "round 7.5cm"}
         ], _f)
