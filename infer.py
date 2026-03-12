@@ -22,8 +22,9 @@ class Predictor(Camera, HasDevice):
         if not self.paused:
             x1, y1, x2, y2 = bbox
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            images = torch.as_tensor(roi, dtype=torch.float, device=self._device).permute(2, 0, 1)
-            logits = self.predictor.predict(images)[0]
+            image = torch.as_tensor(cv2.cvtColor(roi, cv2.COLOR_BGR2RGB), dtype=torch.float,
+                                     device=self._device).permute(2, 0, 1)
+            logits = self.predictor.predict_image(image)
             class_id = convert_logits_to_ids(logits, channel_dim=0).item()
             cv2.putText(frame, f"Class: {class_id}", (20, 40), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2,
                         cv2.LINE_AA)
