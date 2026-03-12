@@ -29,7 +29,7 @@ class Editor(Camera):
             if self.refresh:
                 image = self.dataset.image(self.idx)
                 label = getattr(self.dataset, "_labels")[self.idx]
-                frame = image.numpy()
+                frame = cv2.cvtColor(image.permute(1, 2, 0).numpy() / 255, cv2.COLOR_RGB2BGR)
                 cv2.putText(frame, f"Class: {label}", (20, 40), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2,
                             cv2.LINE_AA)
                 cv2.putText(frame, f"Editing: {self.editing}", (20, 80), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255),
