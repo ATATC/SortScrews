@@ -11,16 +11,15 @@ readme = "README.md"
 requires-python = ">=3.12"
 authors = [
     { name = "Project Neura", email = "central@projectneura.org" },
-    { name = "Tianhao Fu", email = "terry.fu@projectneura.org" },
-    { name = "Yucheng Chen", email = "steven.chen@projectneura.org" }
+    { name = "Tianhao Fu", email = "terry.fu@projectneura.org" }
 ]
 dependencies = ["mipcandy", "opencv-python"]
 
 [tool.hatch.build.targets.sdist]
-only-include = ["segwithu"]
+only-include = ["sort_screws"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["segwithu"]
+packages = ["sort_screws"]
 
 [project.urls]
 Homepage = "https://github.com/ATATC/SortScrews"
