@@ -7,14 +7,14 @@ import torch
 from torchvision.transforms import Resize
 from mipcandy import HasDevice, Device, convert_logits_to_ids, auto_device
 
-from sort_screws import Camera, EfficientNetPredictor
+from sort_screws import Camera, ResNetPredictor
 
 
 class Predictor(Camera, HasDevice):
     def __init__(self, experiment_folder: str | PathLike[str], *, device: Device = "cpu") -> None:
         Camera.__init__(self, 512)
         HasDevice.__init__(self, device)
-        self.predictor: EfficientNetPredictor = EfficientNetPredictor(str(experiment_folder), (3, 512, 512),
+        self.predictor: ResNetPredictor = ResNetPredictor(str(experiment_folder), (3, 512, 512),
                                                                       device=device)
         self.paused: bool = False
         self.resize: Resize = Resize(224)
@@ -43,5 +43,5 @@ class Predictor(Camera, HasDevice):
 if __name__ == "__main__":
     device = auto_device()
     print(device)
-    app = Predictor("trainer/EfficientNetTrainer/final", device=device)
+    app = Predictor(f"trainer/{ResNetPredictor.__name__}/final", device=device)
     app.run()
