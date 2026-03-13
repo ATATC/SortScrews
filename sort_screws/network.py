@@ -29,5 +29,5 @@ class ResNetNetwork(WithNetwork):
         model.fc = nn.Linear(model.fc.in_features, self.num_classes)
         # make backbone trainable or frozen
         for name, param in model.named_parameters():
-            param.requires_grad = True if name == "fc" else self.is_backbone_trainable
+            param.requires_grad = True if name.startswith("fc") else self.is_backbone_trainable
         return model
