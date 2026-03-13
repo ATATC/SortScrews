@@ -1,5 +1,7 @@
 # SortScrew
 
+![poster](assets/SortScrews.png)
+
 SortScrew is a dataset for screw classification. We collected 560 images on 6 types of screws.
 
 ## Citation
