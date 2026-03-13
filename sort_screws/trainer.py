@@ -4,7 +4,7 @@ import torch
 from mipcandy import Trainer, Params, AmbiguousShape, TrainerToolbox, convert_logits_to_ids, save_image
 from torch import optim, nn
 
-from sort_screws.network import EfficientNetNetwork
+from sort_screws.network import EfficientNetNetwork, ResNetNetwork
 
 
 class EfficientNetTrainer(EfficientNetNetwork, Trainer):
@@ -65,3 +65,7 @@ class EfficientNetTrainer(EfficientNetNetwork, Trainer):
         output = str(convert_logits_to_ids(output, channel_dim=0).item())
         with open(f"{self.experiment_folder()}/output.txt", "w") as f:
             f.write(output)
+
+
+class ResNetTrainer(ResNetNetwork, EfficientNetTrainer):
+    pass
