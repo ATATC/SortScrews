@@ -75,4 +75,4 @@ app = Collector(append_from=LENGTH_OF_EXISTING_DATASET)
 
 ## Acknowledgement
 
-We kindly ask other Praxis II groups not to copy our solution.
+We kindly ask other Praxis II groups not to copy our solution. We do not permit other groups to use our dataset.
