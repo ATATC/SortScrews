@@ -76,3 +76,8 @@ app = Collector(append_from=LENGTH_OF_EXISTING_DATASET)
 ## Acknowledgement
 
 We kindly ask other Praxis II groups not to copy our solution. We do not permit other groups to use our dataset.
+
+## Outlook
+
+We noticed that the model generalizes well to different backgrounds. The visual guide is not necessary. We can further
+explore this as well as the unexpected sensitivity to screw locations.
