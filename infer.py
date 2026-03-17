@@ -29,7 +29,7 @@ class Predictor(Camera, HasDevice):
             image = self.resize(image)
             logits = self.predictor.predict_image(image)
             class_id = convert_logits_to_ids(logits, channel_dim=0).item()
-            cv2.putText(frame, f"Class: {class_id}", (20, 40), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2,
+            cv2.putText(frame, f"Class: {class_id}", (40, 80), cv2.FONT_HERSHEY_COMPLEX, 2, (0, 255, 0), 2,
                         cv2.LINE_AA)
             cv2.imshow("Camera Preview", frame)
         key = self.wait_key()
