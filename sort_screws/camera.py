@@ -31,7 +31,7 @@ class Camera(object):
             y1 = cy - half
             x2 = cx + half
             y2 = cy + half
-            roi = frame[y1:y2, x1:x2]
+            roi = frame[y1:y2, x1:x2].copy()
             if self._resize:
                 roi = cv2.resize(roi, (self._resize, self._resize), interpolation=cv2.INTER_AREA)
             if self.job(frame, roi, (x1, y1, x2, y2)):
