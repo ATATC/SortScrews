@@ -7,7 +7,7 @@ import torch
 from mipcandy import HasDevice, Device, convert_logits_to_ids, auto_device
 from torchvision.transforms import Resize
 
-from sort_screws import Camera, ResNetPredictor
+from sort_screws import Camera, ResNetPredictor, cv2pt
 
 
 class Predictor(Camera, HasDevice):
@@ -24,8 +24,7 @@ class Predictor(Camera, HasDevice):
         if not self.paused:
             x1, y1, x2, y2 = bbox
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            image = torch.as_tensor(cv2.cvtColor(roi, cv2.COLOR_BGR2RGB), dtype=torch.float,
-                                    device=self._device).permute(2, 0, 1)
+            image = cv2pt(roi, device=self._device)
             image = self.resize(image)
             logits = self.predictor.predict_image(image)
             class_id = convert_logits_to_ids(logits, channel_dim=0).item()
