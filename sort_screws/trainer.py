@@ -4,7 +4,7 @@ import torch
 from mipcandy import Trainer, Params, AmbiguousShape, TrainerToolbox, convert_logits_to_ids, save_image
 from torch import optim, nn
 
-from sort_screws.network import EfficientNetNetwork, ResNetNetwork
+from sort_screws.network import EfficientNetNetwork, ResNetNetwork, SwinV2Network
 
 
 class EfficientNetTrainer(EfficientNetNetwork, Trainer):
@@ -68,4 +68,8 @@ class EfficientNetTrainer(EfficientNetNetwork, Trainer):
 
 
 class ResNetTrainer(ResNetNetwork, EfficientNetTrainer):
+    pass
+
+
+class SwinV2Trainer(SwinV2Network, EfficientNetTrainer):
     pass
