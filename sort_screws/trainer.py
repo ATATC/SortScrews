@@ -40,7 +40,7 @@ class EfficientNetTrainer(EfficientNetNetwork, Trainer):
         logits = toolbox.model(images)
         loss = toolbox.criterion(logits.softmax(1), labels)
         loss.backward()
-        return loss.item(), {}
+        return loss.item(), {"accuracy": (convert_logits_to_ids(logits) == labels).float().mean().item()}
 
     @override
     def validate_case(self, idx: int, image: torch.Tensor, label: torch.Tensor, toolbox: TrainerToolbox) -> tuple[
