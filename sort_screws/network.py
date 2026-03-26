@@ -68,7 +68,7 @@ class SwinV2Network(WithNetwork):
 
 class ConvNeXtNetwork(WithNetwork):
     num_classes: int = 7
-    is_backbone_trainable: bool = True
+    is_backbone_trainable: bool = False
 
     @override
     def build_network(self, example_shape: AmbiguousShape) -> nn.Module:
