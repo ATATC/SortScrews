@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader
 from torchvision.transforms import Resize
 from mipcandy import download_dataset, auto_device, MONAITransform, JointTransform
 
-from sort_screws import SortScrewsDataset, SwinV2Trainer
+from sort_screws import SortScrewsDataset, ConvNeXtV2Trainer
 
 if __name__ == "__main__":
     if not exists("SortScrews") and input("Dataset not found, download? (y/n) >>>") == "y":
@@ -17,7 +17,7 @@ if __name__ == "__main__":
         raise ValueError(f"Number of classes mismatch: train={train.num_classes}, val={val.num_classes}")
     train_dl = DataLoader(train, 16, True, num_workers=4, prefetch_factor=2, persistent_workers=True, pin_memory=True)
     val_dl = DataLoader(val, 1, False)
-    trainer = SwinV2Trainer("trainer", train_dl, val_dl, recoverable=False, device=auto_device())
+    trainer = ConvNeXtV2Trainer("trainer", train_dl, val_dl, recoverable=False, device=auto_device())
     trainer.num_classes = train.num_classes
     trainer.train(100, seed=42, compile_model=False, early_stop_tolerance=100)
     target = f"trainer/{trainer.__class__.__name__}/final"
