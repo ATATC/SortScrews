@@ -52,7 +52,7 @@ class SwinV2Network(WithNetwork):
         return model
 
 
-class ConvNeXtV2Network(WithNetwork):
+class ConvNeXtNetwork(WithNetwork):
     num_classes: int = 7
     is_backbone_trainable: bool = False
 

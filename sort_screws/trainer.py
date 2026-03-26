@@ -75,5 +75,5 @@ class SwinV2Trainer(SwinV2Network, EfficientNetTrainer):
     pass
 
 
-class ConvNeXtV2Trainer(EfficientNetTrainer):
+class ConvNeXtTrainer(EfficientNetTrainer):
     pass
