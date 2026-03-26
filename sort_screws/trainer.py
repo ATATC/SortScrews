@@ -1,8 +1,7 @@
 from typing import override
 
 import torch
-from mipcandy import Trainer, Params, AmbiguousShape, TrainerToolbox, convert_logits_to_ids, save_image, \
-    convert_ids_to_logits
+from mipcandy import Trainer, Params, AmbiguousShape, TrainerToolbox, convert_logits_to_ids, save_image
 from torch import optim, nn
 
 from sort_screws.network import EfficientNetNetwork, ResNetNetwork, SwinV2Network
@@ -39,7 +38,7 @@ class EfficientNetTrainer(EfficientNetNetwork, Trainer):
     def backward(self, images: torch.Tensor, labels: torch.Tensor, toolbox: TrainerToolbox) -> tuple[float, dict[
         str, float]]:
         logits = toolbox.model(images)
-        loss = toolbox.criterion(logits.softmax(1), labels)
+        loss = toolbox.criterion(logits, labels)
         loss.backward()
         return loss.item(), {"correctness": (convert_logits_to_ids(logits) == labels).float().mean().item()}
 
