@@ -10,7 +10,7 @@ from sort_screws import SortScrewsDataset, ConvNeXtTrainer
 if __name__ == "__main__":
     if not exists("SortScrews") and input("Dataset not found, download? (y/n) >>>") == "y":
         download_dataset("atatc/ut/esc102/SortScrews", "SortScrews")
-    transforms = JointTransform(image_only=MONAITransform(Resize(256)))
+    transforms = JointTransform(image_only=MONAITransform(Resize(224)))
     train = SortScrewsDataset("SortScrews", True, transform=transforms)
     val = SortScrewsDataset("SortScrews/validation", True, transform=transforms)
     if train.num_classes != val.num_classes:
