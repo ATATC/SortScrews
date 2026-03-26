@@ -1,7 +1,8 @@
 from typing import override
 
 import torch
-from mipcandy import Trainer, Params, AmbiguousShape, TrainerToolbox, convert_logits_to_ids, save_image
+from mipcandy import Trainer, Params, AmbiguousShape, TrainerToolbox, convert_logits_to_ids, save_image, \
+    convert_ids_to_logits
 from torch import optim, nn
 
 from sort_screws.network import EfficientNetNetwork, ResNetNetwork, SwinV2Network
@@ -40,14 +41,14 @@ class EfficientNetTrainer(EfficientNetNetwork, Trainer):
         logits = toolbox.model(images)
         loss = toolbox.criterion(logits.softmax(1), labels)
         loss.backward()
-        return loss.item(), {"accuracy": (convert_logits_to_ids(logits) == labels).float().mean().item()}
+        return loss.item(), {"correctness": (convert_logits_to_ids(logits) == labels).float().mean().item()}
 
     @override
     def validate_case(self, idx: int, image: torch.Tensor, label: torch.Tensor, toolbox: TrainerToolbox) -> tuple[
         float, dict[str, float], torch.Tensor]:
         image, label = image.unsqueeze(0), label.unsqueeze(0)
         logits = toolbox.model(image)
-        loss = toolbox.criterion(logits.softmax(1), label)
+        loss = toolbox.criterion(logits, label)
         pred_ids = convert_logits_to_ids(logits)
         metrics = {"correctness": float((pred_ids == label).item())}
         for class_id in range(self.num_classes):

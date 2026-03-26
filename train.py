@@ -2,7 +2,7 @@ from os import rename
 from os.path import exists
 
 from torch.utils.data import DataLoader
-from torchvision.transforms import Resize
+from torchvision.transforms import Resize, Compose
 from mipcandy import download_dataset, auto_device, MONAITransform, JointTransform
 
 from sort_screws import SortScrewsDataset, ConvNeXtTrainer
@@ -10,9 +10,9 @@ from sort_screws import SortScrewsDataset, ConvNeXtTrainer
 if __name__ == "__main__":
     if not exists("SortScrews") and input("Dataset not found, download? (y/n) >>>") == "y":
         download_dataset("atatc/ut/esc102/SortScrews", "SortScrews")
-    resize = JointTransform(image_only=MONAITransform(Resize(224)))
-    train = SortScrewsDataset("SortScrews", True, transform=resize)
-    val = SortScrewsDataset("SortScrews/validation", True, transform=resize)
+    transforms = JointTransform(image_only=MONAITransform(Compose([Resize(224), ConvNeXtTrainer.get_transforms()])))
+    train = SortScrewsDataset("SortScrews", True, transform=transforms)
+    val = SortScrewsDataset("SortScrews/validation", True, transform=transforms)
     if train.num_classes != val.num_classes:
         raise ValueError(f"Number of classes mismatch: train={train.num_classes}, val={val.num_classes}")
     train_dl = DataLoader(train, 16, True, num_workers=4, prefetch_factor=2, persistent_workers=True, pin_memory=True)
