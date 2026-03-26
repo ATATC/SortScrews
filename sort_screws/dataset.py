@@ -1,7 +1,7 @@
-from os.path import exists
-from os import PathLike
-from typing import override, Self
 from json import load
+from os import PathLike
+from os.path import exists
+from typing import override, Self
 
 import torch
 from mipcandy import SupervisedDataset, JointTransform, Device
