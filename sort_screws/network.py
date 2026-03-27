@@ -3,7 +3,7 @@ from typing import override
 from mipcandy import WithNetwork, AmbiguousShape
 from torch import nn
 from torchvision.models import EfficientNet_B0_Weights, efficientnet_b0, ResNet18_Weights, resnet18, \
-    Swin_V2_T_Weights, swin_v2_t, ConvNeXt_Small_Weights, convnext_small
+    Swin_V2_T_Weights, swin_v2_t, ConvNeXt_Tiny_Weights, convnext_tiny
 
 
 class EfficientNetNetwork(WithNetwork):
@@ -72,8 +72,8 @@ class ConvNeXtNetwork(WithNetwork):
 
     @override
     def build_network(self, example_shape: AmbiguousShape) -> nn.Module:
-        weights = ConvNeXt_Small_Weights.DEFAULT
-        model = convnext_small(weights=weights)
+        weights = ConvNeXt_Tiny_Weights.DEFAULT
+        model = convnext_tiny(weights=weights)
         in_features = model.classifier[-1].in_features
         model.classifier[-1] = nn.Sequential(nn.LayerNorm(in_features), nn.Flatten(),
                                              nn.Linear(in_features, self.num_classes))
@@ -85,4 +85,4 @@ class ConvNeXtNetwork(WithNetwork):
 
     @staticmethod
     def get_transforms() -> nn.Module:
-        return ConvNeXt_Small_Weights.DEFAULT.transforms()
+        return ConvNeXt_Tiny_Weights.DEFAULT.transforms()
