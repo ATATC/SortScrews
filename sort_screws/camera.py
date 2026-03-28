@@ -3,10 +3,12 @@ import numpy as np
 
 
 class Camera(object):
-    def __init__(self, roi_size: int, *, resize: int | None = None, device_id: int = 0) -> None:
+    def __init__(self, roi_size: int, *, resize: int | None = None, device_id: int = 0,
+                 upside_down: bool = False) -> None:
         self._roi_size: int = roi_size
         self._resize: int | None = resize
         self._device_id: int = device_id
+        self._upside_down: bool = upside_down
 
     @staticmethod
     def wait_key(*, delay: int = 1) -> int:
@@ -23,6 +25,8 @@ class Camera(object):
             ret, frame = cap.read()
             if not ret:
                 break
+            if self._upside_down:
+                frame = frame[:, ::-1, :]
             h, w = frame.shape[:2]
             cx = w // 2
             cy = h // 2
