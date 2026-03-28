@@ -26,7 +26,7 @@ class Camera(object):
             if not ret:
                 break
             if self._upside_down:
-                frame = frame[:, ::-1, :]
+                frame = cv2.rotate(frame, cv2.ROTATE_180)
             h, w = frame.shape[:2]
             cx = w // 2
             cy = h // 2
